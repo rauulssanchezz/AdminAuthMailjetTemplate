@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/layout :: admin-head('Verification Codes Management')}"></head>
+
+<body>
+    <nav th:replace="~{admin/layout :: admin-navbar}"></nav>
+
+    <div class="container mt-5">
+    <div th:replace="~{admin/layout :: alerts}"></div>
+
+    <div class="card custom-card">
+        <div class="card-body">
+            <h2>Verification Codes List</h2>
+            
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Code</th>
+                        <th>User Email</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="vc : ${verificationCodes}">
+                        <td th:text="${vc.id}">1</td>
+                        <td th:text="${vc.code}">ABC1234567</td>
+                        <td th:text="${vc.user.email}">user@test.com</td>
+                        <td th:text="${vc.createdAt}">Jan 1, 2024</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div th:replace="~{admin/layout :: admin-scripts}"></div>
+</body>
+</html>

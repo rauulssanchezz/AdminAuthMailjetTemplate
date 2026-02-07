@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{admin/layout :: admin-head('User Management')}"></head>
+
+<body>
+    <nav th:replace="~{admin/layout :: admin-navbar}"></nav>
+
+    <div class="container mt-5">
+        <div th:replace="~{admin/layout :: alerts}"></div>
+
+        <div class="card custom-card">
+            <div class="card-body">
+                <h2>User List</h2>
+
+                <table class="table mt-4">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Active</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="u : ${users}">
+                            <td th:text="${u.id}">1</td>
+                            <td th:text="${u.email}">admin@test.com</td>
+                            <td th:text="${u.isActive}">none</td>
+                            <td><span class="badge bg-info" th:text="${u.role}">ADMIN</span></td>
+                            <td>
+                                <form th:action="@{/admin/users/delete/{id}(id=${u.id})}" method="post"
+                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');"
+                                    style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div th:replace="~{admin/layout :: admin-scripts}"></div>
+</body>
+
+</html>

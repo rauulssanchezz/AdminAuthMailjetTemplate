@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/layout :: admin-head('Access Denied')}"></head>
+<body class="bg-light">
+    <nav th:replace="~{admin/layout :: admin-navbar}"></nav>
+
+    <div class="container mt-5 text-center">
+        <div class="card custom-card p-5">
+            <i class="bi bi-shield-lock-fill text-danger" style="font-size: 5rem;"></i>
+            <h1 class="display-4 fw-bold">403</h1>
+            <p class="lead">Sorry, you don't have permission to access this section.</p>
+            <div class="mt-4">
+                <a th:href="@{/admin/dashboard}" class="btn btn-custom-primary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{admin/layout :: admin-scripts}"></div>
+</body>
+</html>
