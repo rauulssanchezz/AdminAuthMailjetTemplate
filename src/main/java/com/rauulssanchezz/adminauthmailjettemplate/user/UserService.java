@@ -14,8 +14,9 @@ import com.rauulssanchezz.adminauthmailjettemplate.utils.mailjet.OptionsToSendIn
 @Service
 public class UserService {
 
+    @Autowired
     private VerificationCodeService verificationCodeService;
-    
+
     @Autowired
     private UserRepository userRepository;
 
@@ -59,12 +60,33 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public Boolean verifyPassword(Long userId, String newPassword, String confirmPassword) {
+    public void sendResetPasswordEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            try {
+                mailJetUtils.sendMailJetEmail(user.get(), OptionsToSendInterface.resetPasswordCode);
+            } catch (MailjetException e) {
+                System.err.println("Error sending reset password email: " + e.getMessage());
+            }
+        }
+    }
+
+    public void resetPassword(Long userId, String code, String newPassword, String confirmPassword) {
         if (!newPassword.equals(confirmPassword)) {
-            throw new RuntimeException("Passwords dont match");
+            throw new RuntimeException("Passwords do not match");
         }
 
-        return verificationCodeService.verifyPasswordCode(userId, newPassword);
+        boolean verified = verificationCodeService.verifyPasswordCode(userId, code);
+
+        if (!verified) {
+            throw new RuntimeException("Invalid or expired verification code");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 
     public void delete(long id) {
